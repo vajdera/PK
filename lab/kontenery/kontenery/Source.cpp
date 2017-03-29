@@ -6,29 +6,28 @@
 #include <queue>
 #include <map>
 
-using namespace std;
 
 class NaprawianeAuto {
 
 public:
 
 	int idAuta;
-	list<string> historia;
-	priority_queue<string, vector<string>, greater<string>> doNaprawy;
+	std::list<std::string> historia;
+	std::priority_queue<std::string, std::vector<std::string>, std::greater<std::string>> doNaprawy;
 	
 
 	void wypHisoria() {
 		
-		cout << "Historia napraw:\n";
+		std::cout << "Historia napraw:\n";
 
-		for (auto& i :do Naprawy)
-			cout <<" -"<<i << endl;	
+		for (auto& i : historia)
+			std::cout <<" "<< i << std::endl;
 	
-	};
+	}
 
 
 
-	NaprawianeAuto(int i):idAuta(i) {};
+	NaprawianeAuto(int i):idAuta(i) {}
 
 
 
@@ -39,26 +38,26 @@ class Serwis {
 
 public:
 	int idSerwisu;
-	string nazwaSerwisu;
+	std::string nazwaSerwisu;
 
-	deque<NaprawianeAuto, vector<NaprawianeAuto>> auta;
+	std::deque<NaprawianeAuto>auta;
 
-	multimap<int, string> usterki ;
+	std::multimap<int, std::string> usterki;
 
 	void naprawAuto(int id) {
 		
 
 		for(auto& i : auta ) {
-			if (i.idAuta != id) {
+			if (i.idAuta == id) {
 				
-				cout << "Naprawiono:\n";
+				std::cout << "Naprawiono:\n";
 				while (!i.doNaprawy.empty()) {
 
-					cout << " -" << i.doNaprawy.top() << endl;
+					std::cout << " -" << i.doNaprawy.top() << std::endl;
 
 					i.historia.push_back(i.doNaprawy.top());
 
-					usterki.insert(pair<int, string>(i.idAuta, i.doNaprawy.top()));
+					usterki.insert(std::pair<int, std::string>(i.idAuta, i.doNaprawy.top()));
 					
 					i.doNaprawy.pop();
 					
@@ -69,48 +68,37 @@ public:
 		
 
 
-	};
+	}
 
 
 	void wyswietlNaprawy() {
 		
-		cout << "Historia serwisu:\n";
+		std::cout << "Historia serwisu:\n";
 
-		for (auto & i:usterki) {
+		for (auto& i:usterki) {
 			
-			cout << " -" << i.first << " " << i.second << endl;
+			std::cout << " -" << i.first << " " << i.second << std::endl;
 		
 		}
 			
 	
 	
 	
-	};
+	}
 		
 
-	Serwis(int i,string nazwa): idSerwisu(i),nazwaSerwisu(nazwa) {};
+	Serwis(int i, std::string nazwa): idSerwisu(i),nazwaSerwisu(nazwa) {}
 	
 };
-
-
-
-
-
-
-
-
-
-
-
 
 
 int main() {
 
 	
-	vector<Serwis> serwisy;
+	std::vector<Serwis> serwisy;
 
 	serwisy.emplace_back(1,"ziutekpol");
-	serwisy.emplace_back(2, "Napawex");
+	serwisy.emplace_back(2, "napawex");
 
 	serwisy[0].auta.emplace_front(666);
 	serwisy[1].auta.emplace_front(756);
@@ -119,7 +107,8 @@ int main() {
 	serwisy[0].auta[0].doNaprawy.push("pasek rozrzadu");
 
 
-	cout << serwisy[0].auta[0].wypHisoria() << endl;
+	
+
 
 	for (auto&i : serwisy) {
 	
