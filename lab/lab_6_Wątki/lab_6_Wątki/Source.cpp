@@ -17,7 +17,7 @@ void print1(unsigned int x) {
 }
 
 void print2(unsigned int x) {
-	mutex mux;
+	static mutex mux;
 	mux.lock();
 	for (int i = 0; i < 5; i++)
 		cout << x << "  ";
@@ -38,7 +38,7 @@ class Employee {
 public:
 	string name;
 	vector<string> history;
-
+	mutex mux;
 	
 	Employee(string name) :name(name) {}
 
@@ -54,6 +54,27 @@ public:
 
 
 };
+
+void call(Employee &e1, Employee &e2) {
+
+	while (-1==try_lock(e1.mux, e2.mux)) {
+		
+		cout << e1.name << " i " << e2.name<<" rozmawiaja" << endl;
+
+		e1.history.push_back(e2.name);
+		e2.history.push_back(e1.name);
+		
+		this_thread::sleep_for(1s);
+		cout << "koniec rozmowy"<<endl<<endl;
+		e1.mux.unlock();
+		e2.mux.unlock();
+		break;
+	}
+
+
+
+}
+
 
 
 int main() {
@@ -108,6 +129,21 @@ int main() {
 	cout << sum << endl << endl;
 
 	cout << "\n\n\n\ZAD 3\n\n";
+
+	Employee Bartek("Bartek"), Janusz("Janusz"), Bartoslawa("Bartoslawa");
+
+	threads.clear();
+	threads.emplace_back(call, ref(Bartek), ref(Bartoslawa));
+	threads.emplace_back(call, ref(Janusz), ref(Bartoslawa));
+	threads.emplace_back(call, ref(Janusz), ref(Bartek));
+
+
+	for (auto& i : threads)
+		i.join();
+
+	Bartek.print();
+	Janusz.print();
+	Bartoslawa.print();
 
 
 
